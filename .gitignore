@@ -32,7 +32,7 @@
 .vscode
 
 # CMAKE
-Build
+build
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
