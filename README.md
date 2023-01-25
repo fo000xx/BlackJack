@@ -11,4 +11,4 @@ The master/main name change fucked me and git wouldn't let me merge them - ripme
 TODO:
 Add a mechanism to show the player their hand after each draw
 
-Refactor the playBlackjack - I think I can make it slightly cleaner
+TODO: Refactor the playBlackjack - I think I can make it slightly cleaner
