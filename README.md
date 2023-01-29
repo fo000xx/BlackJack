@@ -1,14 +1,13 @@
 # BlackJack
 BlackJack Game - Built as part of learncpp
 
-Initial runthrough as a quick mockup all in a single file, and class-less.
-
-The current iteration onwards splits this into multiple files for readability and introduces classes.
+v0.1.0 Initial concept, functions as a basic blackjack game
+v1.0.0 Refactored code to make individual functions less bulky
 
 TODO: Ability to change an Ace to have a value of 1.
 
-TODO:Add a mechanism to show the player their hand after each draw
-
-TODO: Refactor the playBlackjack - I think I can make it slightly cleaner
+TODO: Add a mechanism to show the player/dealer their hand after each draw
 
 TODO: Add a betting mechanism
+
+TODO: Add functionality for when player and dealer both get 21
