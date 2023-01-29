@@ -7,38 +7,60 @@
 #include "Deck.h" // creates the Deck object
 #include "Player.h" //creates the player object
 
-void playerTurn(Deck& deck, Player& player)
+bool playerHits()
+{
+    char x;
+    std::cout << "Would you like to hit (h) or stand (s)?\n";
+    std::cin >> x;
+
+    if (x == 's') 
+        return false;
+    return true;
+}
+
+bool playerTurn(Deck& deck, Player& player)
 {
     //start the game - draw two cards
     int cardOne{ player.drawCard(deck) };
     int cardTwo{ player.drawCard(deck) };
     std::cout << "The player has drawn two cards with values " << cardOne << " and " << cardTwo 
         << " their current score is " << player.score() << '\n';
-    if (player.isBust(player.score())) return ;
-
-    //ask if they'd like to hit/stand, if stand return, if hit continue - if final card makes them bust, return
+    
     while (true)
     {   
-        char x;
-        std::cout << "Would you like to hit (h) or stand (s)?\n";
-        std::cin >> x;
-
-        if (x == 's') return;
-
-        int playerCard{ player.drawCard(deck) };
+        //check for bust at the start - as they can be bust from the first two cards.
+        if (player.isBust()) 
+        {
+            std::cout << "You're bust!\n";
+            return true; //return true if bust, false if not
+        }    
+        
+        if (!playerHits())
+            return false;
+        
+        int playerCard{ player.drawCard(deck) };   
         std::cout << "The player drew a card with value " << playerCard << " and now has score " << player.score() << '\n';
-
-        if (player.isBust(player.score())) return ;
     }
 }
 
-void dealerTurn(Deck& deck, Player& dealer)
+bool dealerTurn(Deck& deck, Player& dealer)
 {
+    //dealer shows hidden hole card
+    std::cout << "The dealer starts with a score of: " << dealer.score() << '\n';
+
+    //dealer play loop
     do
     {
         int dealerCard{ dealer.drawCard(deck) };
         std::cout << "The dealer drew a card with value " << dealerCard << " and now has score " << dealer.score() << '\n';        
     } while (dealer.score() < g_constants::g_minimumDealerScore);
+
+    if (dealer.isBust())
+    {
+        std::cout << "The dealer is bust!\n";
+        return true;
+    }
+    return false;
 }
 
 bool playBlackjack(Deck& deck, Player& player, Player& dealer)
@@ -48,26 +70,19 @@ bool playBlackjack(Deck& deck, Player& player, Player& dealer)
     int dealerCard { dealer.drawCard(deck) };
     std::cout << "The dealer drew a facedown card and a card with value " << dealerCard << '\n';
 
-    //players turn - if the score is over 21 they go bust.
-    playerTurn(deck, player);
-    if (player.isBust(player.score()))
-    {
-            std::cout << "You're bust!\n";
-            return false;
-    }
+    //players turn - if a true is returned, they're bust
+    if (playerTurn(deck, player))
+        return true;
 
-    //dealers turn
-    dealerTurn(deck, dealer);
+    //dealers turn - true if they're bust
+    if (dealerTurn(deck, dealer))
+        return false;
 
-    //win conditions - return false if a loss
-    if (player.score() > g_constants::g_maximumscore || ((dealer.score() <= g_constants::g_maximumscore) && (dealer.score() > player.score())))
-    {
-            return false;
-    }
-    else
-    {
-        return true;;
-    }
+    //win conditions - return, function has exited if there's a bust. Therefore only compare
+    //player to dealer score. Return false if player wins.
+    if (player.score() > dealer.score())
+        return false;
+    return true;;
 }
 
 int main()
@@ -80,14 +95,10 @@ int main()
     Player player{};
     Player dealer{};
 
-    if(playBlackjack(deck, player, dealer))
-    {
+    if(!playBlackjack(deck, player, dealer))
         std::cout << "The player wins!\n";
-    }
     else
-    {
         std::cout << "The house wins!\n";
-    }
 
     return 0;
 }

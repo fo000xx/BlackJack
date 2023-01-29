@@ -6,7 +6,7 @@
 #include "Deck.h"
 #include "g_constants.h"
 
-using PlayerHand = std::array<Card, 7>;
+using PlayerHand = std::array<Card, g_constants::g_maximumHand>;
 
 class Player
 {
@@ -18,7 +18,7 @@ public:
     Player() = default;
 
     int score() { return m_score; }
-    bool isBust(int m_score) { return m_score > g_constants::g_maximumscore; }
+    bool isBust() { return m_score > g_constants::g_maximumscore; }
 
     //forward declarations for member functions
     int drawCard(Deck& deck);
