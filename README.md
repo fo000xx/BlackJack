@@ -1,5 +1,5 @@
 # BlackJack
-BlackJack Game - Built as part of learncpp
+BlackJack Game
 
 v0.1.0 Initial concept, functions as a basic blackjack game
 v1.0.0 Refactored code to make individual functions less bulky
